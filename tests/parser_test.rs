@@ -59,6 +59,11 @@ proptest! {
         let _ = match_string(&s);
     }
 
+    #[test]
+    fn it_tokenizes_without_crashes(s in ".*") {
+        let _ = match_string(&s);
+    }
+
     // #[test]
     // fn it_parses_anything_without_crashes(s in ".*") {
     //     let _ = parse_program(&s);

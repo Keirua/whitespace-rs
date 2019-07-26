@@ -2,6 +2,8 @@ use crate::instruction::*;
 
 type ParseResult<'a, Output> = Result<(&'a str, Output), String>;
 
+
+
 // low values are on the right
 pub fn match_int(input: &str) -> ParseResult<i32> {
     let mut int_value: i32 = 0;
@@ -121,34 +123,36 @@ fn create_jneg_instruction(x: (&str, String)) -> ParseResult<Instruction> {
     Ok((x.0, Instruction::JNeg(x.1)))
 }
 
+fn parse_start_space<'a >(chars: &Vec<char>, ws_program: &'a str) -> ParseResult<'a, Instruction> {
+    if chars[1] == ' ' {
+        match_int(&ws_program[2..]).and_then(create_push_instruction)
+    } else if chars[1] == '\n' {
+        if chars[2] == ' ' {
+            Ok((&ws_program[3..], Instruction::Duplicate))
+        } else if chars[2] == '\t' {
+            Ok((&ws_program[3..], Instruction::Swap))
+        } else if chars[2] == '\n' {
+            Ok((&ws_program[3..], Instruction::Discard))
+        } else {
+            Err(format!("{} is an unexpected character", chars[2]))
+        }
+    } else if chars[1] == '\t' {
+        if chars[2] == ' ' {
+            match_int(&ws_program[3..]).and_then(create_copynth_instruction)
+        } else if chars[2] == '\n' {
+            match_int(&ws_program[3..]).and_then(create_slide_instruction)
+        } else {
+            Err(format!("{} is an unexpected character", chars[2]))
+        }
+    } else {
+        Err(format!("{} is an unexpected character", chars[1]))
+    }
+}
+
 fn parse_instruction(ws_program: &str) -> ParseResult<Instruction> {
     let chars: Vec<char> = ws_program.chars().collect();
     match chars[0] {
-        ' ' => {
-            if chars[1] == ' ' {
-                match_int(&ws_program[2..]).and_then(create_push_instruction)
-            } else if chars[1] == '\n' {
-                if chars[2] == ' ' {
-                    Ok((&ws_program[3..], Instruction::Duplicate))
-                } else if chars[2] == '\t' {
-                    Ok((&ws_program[3..], Instruction::Swap))
-                } else if chars[2] == '\n' {
-                    Ok((&ws_program[3..], Instruction::Discard))
-                } else {
-                    Err(format!("{} is an unexpected character", chars[2]))
-                }
-            } else if chars[1] == '\t' {
-                if chars[2] == ' ' {
-                    match_int(&ws_program[3..]).and_then(create_copynth_instruction)
-                } else if chars[2] == '\n' {
-                    match_int(&ws_program[3..]).and_then(create_slide_instruction)
-                } else {
-                    Err(format!("{} is an unexpected character", chars[2]))
-                }
-            } else {
-                Err(format!("{} is an unexpected character", chars[1]))
-            }
-        }
+        ' ' => parse_start_space(&chars, &ws_program),
         '\t' => {
             if chars[1] == ' ' {
                 if chars[2] == ' ' {
@@ -241,6 +245,28 @@ fn parse_instruction(ws_program: &str) -> ParseResult<Instruction> {
     }
 }
 
+#[derive(PartialEq, Debug)]
+pub enum Token {
+    Whitspace,
+    Tab,
+    LineFeed
+}
+
+pub fn tokenize(ws_program: &str) -> Vec<Token> {
+    let mut tokens = Vec::new();
+    ws_program
+        .chars()
+        .for_each(|c| {
+            match c {
+                ' ' =>  tokens.push(Token::Whitspace),
+                '\t' => tokens.push(Token::Tab),
+                '\n' => tokens.push(Token::LineFeed),
+                _ => {} 
+            }
+        });
+    tokens
+}
+
 pub fn parse_program(ws_program: &str) -> Result<Vec<Instruction>, &str> {
     let mut ws_program: &str = &(ws_program
         .chars()
@@ -263,6 +289,11 @@ pub fn parse_program(ws_program: &str) -> Result<Vec<Instruction>, &str> {
 
 
 
+#[test]
+fn tokenize_works() {
+    use Token::*;
+    assert_eq!(vec![Whitspace, LineFeed, Tab], tokenize("pouet \n\tabc"));
+}
 
 
 
