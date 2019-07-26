@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()> {
     if opt.debug {
         println!("{:#?}", instructions);
     }
-    
+
     let mut vm = VirtualMachine::new(&instructions.unwrap());
     vm.debug = opt.debug;
 

@@ -49,7 +49,9 @@ impl fmt::Debug for Instruction {
             Instruction::Store => write!(f, "Store"),
             Instruction::Retrieve => write!(f, "Retrieve"),
             Instruction::SetLabel(label) => write!(f, "SetLabel(\"{}\")", label),
-            Instruction::CallSubroutine(subroutine) => write!(f, "CallSubroutine(\"{}\")", subroutine),
+            Instruction::CallSubroutine(subroutine) => {
+                write!(f, "CallSubroutine(\"{}\")", subroutine)
+            }
             Instruction::Jump(label) => write!(f, "Jump(\"{}\")", label),
             Instruction::JZero(label) => write!(f, "JZero(\"{}\")", label),
             Instruction::JNeg(label) => write!(f, "JNeg(\"{}\")", label),

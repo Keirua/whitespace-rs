@@ -214,7 +214,11 @@ impl VirtualMachine {
         }
     }
 
-    fn conditionnal_jump(&mut self, label: &str, predicate: impl Fn(i32) -> bool) -> ExecutionResult {
+    fn conditionnal_jump(
+        &mut self,
+        label: &str,
+        predicate: impl Fn(i32) -> bool,
+    ) -> ExecutionResult {
         if !self.stack.is_empty() {
             let top_stack_value = self.stack.pop().unwrap();
             if predicate(top_stack_value) {
@@ -225,7 +229,7 @@ impl VirtualMachine {
         } else {
             Err("Can't jump: stack is empty")
         }
-    }    
+    }
 
     fn run_jzero(&mut self, label: &str) -> ExecutionResult {
         self.conditionnal_jump(label, |t| t == 0)
@@ -266,7 +270,6 @@ impl VirtualMachine {
     }
     fn run_readint(&mut self) -> ExecutionResult {
         if !self.stack.is_empty() {
-
             let mut input = String::new();
             std::io::stdin().read_line(&mut input).unwrap();
 
@@ -283,7 +286,7 @@ impl VirtualMachine {
     }
 
     fn write_heap(&mut self, address: i32, value: i32) {
-        self.heap.resize((address+1) as usize, 0);
+        self.heap.resize((address + 1) as usize, 0);
         self.heap[address as usize] = value;
     }
 

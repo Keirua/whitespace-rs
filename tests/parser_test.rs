@@ -2,9 +2,8 @@ extern crate whitespace;
 
 use std::fs::File;
 use std::io::prelude::*;
-use whitespace::parser::*;
 use whitespace::instruction::*;
-
+use whitespace::parser::*;
 
 #[test]
 fn match_integer_works() {
@@ -265,7 +264,6 @@ fn parse_program_works() {
         parse_program("  \t\n \n ")
     );
 }
-
 
 #[test]
 fn instruction_push_works() {

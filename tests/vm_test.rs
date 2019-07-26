@@ -299,8 +299,6 @@ fn instruction_jzero_empty_stack_test() {
     assert_eq!(vm.stack, vec![]);
 }
 
-
-
 #[test]
 fn instruction_jneg_nominal() {
     let mut vm = VirtualMachine::new(&vec![
@@ -355,9 +353,6 @@ fn instruction_jneg_empty_stack_test() {
     assert!(res.is_err());
     assert_eq!(vm.stack, vec![]);
 }
-
-
-
 
 #[test]
 fn instruction_call_subroutine_nominal() {
@@ -418,7 +413,6 @@ fn instruction_call_subroutine_empty_stack_test() {
     assert_eq!(vm.call_stack, vec![1]);
 }
 
-
 #[test]
 fn instruction_store_nominal_test() {
     let mut vm = VirtualMachine::new(&vec![
@@ -453,18 +447,11 @@ fn instruction_store_can_resize_test() {
 
 #[test]
 fn instruction_store_not_enough_args_test() {
-    let mut vm = VirtualMachine::new(&vec![
-        Instruction::Push(42),
-        Instruction::Store,
-    ]);
+    let mut vm = VirtualMachine::new(&vec![Instruction::Push(42), Instruction::Store]);
     let res = vm.run_n(3);
 
     assert!(res.is_err());
 }
-
-
-
-
 
 #[test]
 fn instruction_retrieve_nominal_test() {
@@ -498,7 +485,7 @@ fn instruction_retrieve_missing_address_test() {
     assert_eq!(vm.stack, vec![0]); // default value
     assert_eq!(vm.heap[42], 0);
     assert_eq!(vm.heap[128], -2);
-    assert_eq!(128+1, vm.heap.len());
+    assert_eq!(128 + 1, vm.heap.len());
 }
 
 #[test]
