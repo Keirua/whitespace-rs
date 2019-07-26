@@ -56,8 +56,8 @@ impl VirtualMachine {
     }
 
     pub fn run_program(&mut self) {
-        println!("Labels:");
-        println!("{:?}", self.labels);
+        // println!("Labels:");
+        // println!("{:?}", self.labels);
 
         while self.instructions[self.ip] != Instruction::EndOfProgram {
             if self.debug {

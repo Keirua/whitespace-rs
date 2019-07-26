@@ -6,6 +6,23 @@ It's an [esoteric](https://en.wikipedia.org/wiki/Esoteric_programming_language) 
 
 Unfortunately the original language page is dead, but it still lives on [archive.org](https://web.archive.org/web/20150426193527/http://compsoc.dur.ac.uk/whitespace/tutorial.php). A copy of the original Haskell implementation is copied inside the `docs/WSpace` directory
 
+# Goal
+
+ - to have a fully functionnal whitespace interpreter that can run all the available programs
+ - self sufficient: no external dependencies for parsing and virtual machine
+
+Ideally, it would deal with arbitrary sized integer (that's what the original Haskell implementation feature), but right now only regular i32 are used.
+
+# Usage
+
+It can run a whitespace program :
+
+      $ cargo run --bin interpreter -- examples/fact.ws
+
+It can turn a whitespace source file into a rust source file that can the be compiled and run (actually it's more of a transpiler):
+
+      $ cargo run --bin compiler -- examples/count2.ws src/bin/count.rs && cargo run --bin count
+
 # Todo
 
  - [ ] write all the instructions in the virtual machine along with tests
@@ -40,7 +57,12 @@ Unfortunately the original language page is dead, but it still lives on [archive
       - [ ] ReadChar
       - [ ] ReadInt
 
- - [ ] make the VM able to use different streams for I/O (easier testing)
+ - [ ] make the VM able to use different streams for I/O (in order to ease testing)
+ - [ ] implement arbitrary precision integers ?
+ - [x] turns this into a compiler because why not ? (by generating a rust source file that uses its own virtual machine ?)
+
+## side stuff that would be nice to cleanup
+
  - [ ] parser: fix the crash due to out of bounds exceptions
  - [ ] automated tests for every critical branch of the parser
  - [ ] add some property-based tests in the parser
@@ -51,9 +73,8 @@ Unfortunately the original language page is dead, but it still lives on [archive
  - [ ] functionnal tests for the parser that use real programs
  - [ ] write some documentation
  - [ ] cleanup the copies and unwrap as much as possible
- - [x] cleanup this mess with mutable/immutable borrows in `run_instruction`
- - [ ] implement arbitrary precision integers ?
- - [ ] turns this into a compiler because why not ?
+ - [x] cleanup this mies and unwrap as much as possible
+ - [ ] test for empty program (or more generally, program with no end of program. Checking for reachability is… not a solved problem though)
 
 # License
 
