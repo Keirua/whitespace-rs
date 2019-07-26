@@ -11,8 +11,11 @@ use whitespace::vm::*;
 #[derive(StructOpt, Debug)]
 #[structopt(name = "ws")]
 struct Opt {
-    #[structopt(short, long)]
+    #[structopt(name = "debug", short, long)]
     debug: bool,
+    /// Display the parsed instructions
+    #[structopt(name = "instructions", short, long)]
+    instructions: bool,
     /// Input file
     #[structopt(name = "FILE", parse(from_os_str))]
     file: PathBuf,
@@ -26,14 +29,19 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
 
     let instructions = parse_program(&contents);
-    if opt.debug {
-        println!("{:#?}", instructions);
+    match instructions {
+        Ok(instructions) => {
+            if opt.instructions {
+                println!("{:#?}", instructions);
+            }
+
+            let mut vm = VirtualMachine::new(&instructions);
+            vm.debug = opt.debug;
+
+            //let _ = vm.run_n(30);
+            vm.run_program();
+        },
+        Err(e) => println!("{:?}", e)
     }
-
-    let mut vm = VirtualMachine::new(&instructions.unwrap());
-    vm.debug = opt.debug;
-
-    //let _ = vm.run_n(30);
-    vm.run_program();
     Ok(())
 }
