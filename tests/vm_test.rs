@@ -518,3 +518,10 @@ fn instruction_retrieve_not_enough_args_test() {
     assert!(res.is_err());
     assert_eq!(43, vm.heap.len());
 }
+
+
+#[test]
+fn running_an_empty_program_does_not_crash_test() {
+    let mut vm = VirtualMachine::new(&vec![]);
+    vm.run_program();
+}

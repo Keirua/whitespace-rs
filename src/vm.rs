@@ -59,6 +59,8 @@ impl VirtualMachine {
         // println!("Labels:");
         // println!("{:?}", self.labels);
 
+        if self.instructions.is_empty() { return; }
+
         while self.instructions[self.ip] != Instruction::EndOfProgram {
             if self.debug {
                 println!("{:?}", self.instructions[self.ip]);
