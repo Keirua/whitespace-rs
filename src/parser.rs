@@ -3,7 +3,7 @@ use crate::instruction::*;
 type ParseResult<'a, Output> = Result<(&'a str, Output), String>;
 
 // low values are on the right
-fn match_int(input: &str) -> ParseResult<i32> {
+pub fn match_int(input: &str) -> ParseResult<i32> {
     let mut int_value: i32 = 0;
     let mut offset = 0;
 
@@ -36,7 +36,7 @@ fn match_int(input: &str) -> ParseResult<i32> {
     Err("an int should terminate with a \\n".to_string())
 }
 
-fn match_string(input: &str) -> ParseResult<String> {
+pub fn match_string(input: &str) -> ParseResult<String> {
     let mut matched = String::new();
 
     let mut curr_byte: u8 = 0u8;

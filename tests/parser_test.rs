@@ -33,3 +33,34 @@ fn it_can_run_count() {
 
     assert_eq!(tokens, Ok(expected_tokens));
 }
+
+
+
+
+use proptest::prelude::*;
+proptest! {
+    #[test]
+    fn it_parses_any_int_without_crashes(s in ".*") {
+        let _ = match_int(&s);
+    }
+
+    #[test]
+    fn it_parses_any_regular_int_without_crashes(s in "[ \t\n]*") {
+        let _ = match_int(&s);
+    }
+
+    #[test]
+    fn it_parses_any_string_without_crashes(s in ".*") {
+        let _ = match_string(&s);
+    }
+
+    #[test]
+    fn it_parses_any_regular_string_without_crashes(s in "[ \t\n]*") {
+        let _ = match_string(&s);
+    }
+
+    // #[test]
+    // fn it_parses_anything_without_crashes(s in ".*") {
+    //     let _ = parse_program(&s);
+    // }
+}
