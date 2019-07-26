@@ -1,0 +1,10 @@
+[package]
+name = "whitespace"
+version = "0.1.0"
+authors = ["clemkeirua <clement@keiruaprod.fr>"]
+edition = "2018"
+crate-type = ["dynlib"]
+
+[dependencies]
+structopt = "0.2.18"
+nom = "*"
